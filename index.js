@@ -38,15 +38,16 @@ async function checkPair(args) {
 
   const uniswapResult = await exchangeContract.methods.getEthToTokenInputPrice(inputAmount).call()
   let kyberResult = await kyberRateContract.methods.getExpectedRate(inputTokenAddress, outputTokenAddress, inputAmount, true).call()
-
-  console.table([{
+  const blockNumber = await web3.eth.getBlockNumber()
+  console.log([{
+    'Block Number': blockNumber,
     'Input Token': inputTokenSymbol,
     'Output Token': outputTokenSymbol,
     'Input Amount': web3.utils.fromWei(inputAmount, 'Ether'),
     'Uniswap Return': web3.utils.fromWei(uniswapResult, 'Ether'),
     'Kyber Expected Rate': web3.utils.fromWei(kyberResult.expectedRate, 'Ether'),
     'Kyber Min Return': web3.utils.fromWei(kyberResult.slippageRate, 'Ether'),
-    'Timestamp': moment().tz('America/Chicago').format(),
+    'Timestamp': moment().tz('Pacific/Auckland').format(),
   }])
 }
 
@@ -64,7 +65,7 @@ async function monitorPrice() {
   try {
 
     // ADD YOUR CUSTOM TOKEN PAIRS HERE!!!
-
+    // some token addresses not working on kyber network???
     await checkPair({
       inputTokenSymbol: 'ETH',
       inputTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -76,24 +77,24 @@ async function monitorPrice() {
     await checkPair({
       inputTokenSymbol: 'ETH',
       inputTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      outputTokenSymbol: 'DAI',
-      outputTokenAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
+      outputTokenSymbol: 'UNI',
+      outputTokenAddress: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
       inputAmount: web3.utils.toWei('1', 'ETHER')
     })
 
     await checkPair({
       inputTokenSymbol: 'ETH',
       inputTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      outputTokenSymbol: 'KNC',
-      outputTokenAddress: '0xdd974d5c2e2928dea5f71b9825b8b646686bd200',
+      outputTokenSymbol: 'TUSD',
+      outputTokenAddress: '0x0000000000085d4780B73119b644AE5ecd22b376',
       inputAmount: web3.utils.toWei('1', 'ETHER')
     })
 
     await checkPair({
       inputTokenSymbol: 'ETH',
       inputTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      outputTokenSymbol: 'LINK',
-      outputTokenAddress: '0x514910771af9ca656af840dff83e8264ecf986ca',
+      outputTokenSymbol: 'PAXG',
+      outputTokenAddress: '0x45804880de22913dafe09f4980848ece6ecbaf78',
       inputAmount: web3.utils.toWei('1', 'ETHER')
     })
 
@@ -108,7 +109,7 @@ async function monitorPrice() {
 }
 
 // Check markets every n seconds
-const POLLING_INTERVAL = process.env.POLLING_INTERVAL || 3000 // 3 Seconds
+const POLLING_INTERVAL = process.env.POLLING_INTERVAL || 20000 // 3 Seconds
 priceMonitor = setInterval(async () => { await monitorPrice() }, POLLING_INTERVAL)
 
 // async function getKyberABIAndPrice() {
