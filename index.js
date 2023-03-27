@@ -1,13 +1,11 @@
 require('dotenv').config()
-const express = require('express')
-const bodyParser = require('body-parser')
+const _ = require('lodash')
 const http = require('http')
 const Web3 = require('web3')
-const HDWalletProvider = require('@truffle/hdwallet-provider')
-const moment = require('moment-timezone')
-const numeral = require('numeral')
-const _ = require('lodash')
 const axios = require('axios')
+const express = require('express')
+const moment = require('moment-timezone')
+const HDWalletProvider = require('@truffle/hdwallet-provider')
 
 // SERVER CONFIG
 const PORT = process.env.PORT || 5003
